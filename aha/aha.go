@@ -85,3 +85,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 func (c *Client) Do(req *http.Request) (*http.Response, error) {
 	return c.client.Do(req)
 }
+
+type Pagination struct {
+	TotalRecords int `json:"total_records"`
+	TotalPages   int `json:"total_pages"`
+	CurrentPage  int `json:"current_page"`
+}

@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	products, err := client.Products.ListAll()
+	products, _, err := client.Products.ListAll()
 	if err != nil {
 		log.Fatal(err)
 	}

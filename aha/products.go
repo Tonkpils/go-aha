@@ -14,27 +14,25 @@ type Product struct {
 	CreatedAt       string `json:"created_at"` // TODO: Turn this into Time?
 }
 
-type ProductsResponse struct {
-	Products   []*Product     `json:"products"`
-	Pagination map[string]int `json:"pagination"`
-}
-
-func (s *ProductsService) ListAll() ([]*Product, error) {
+func (s *ProductsService) ListAll() ([]Product, *Pagination, error) {
 	req, err := s.client.NewRequest("GET", "products", nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	resp, err := s.client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	productsList := new(ProductsResponse)
+	productsList := new(struct {
+		Products   []Product   `json:"products"`
+		Pagination *Pagination `json:"pagination"`
+	})
 
 	if err := json.NewDecoder(resp.Body).Decode(productsList); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return productsList.Products, nil
+	return productsList.Products, productsList.Pagination, nil
 }
